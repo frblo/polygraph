@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include "grapharm.h"
 
-#define STEPSIZE 1 // degrees
-#define MAXDEVIATION 30 // degrees
+const int STEPSIZE = 1; // degrees
+const int MAXDEVIATION = 30; // degrees
 
 /**
  * Setup the arm servo.
@@ -22,7 +22,7 @@ int rotateArm(Servo *servo, int pos, int *goal) {
     } else if (pos > *goal) {
         pos -= STEPSIZE;
     } else {
-        *goal = calculateGoal(pos);
+        *goal = calculateGoal(pos, 0.01);
     }
     servo->write(pos);
     return pos;
@@ -32,12 +32,11 @@ int rotateArm(Servo *servo, int pos, int *goal) {
  * Calculate the goal, the position the arm should move towards,
  * based on the current position. The goal is a random number
  * between 1 and MAXDEVIATION away from the current position.
- * The goal is calculated with a 1% chance of changing, and
- * a 99% chance of returning/staying on the default position.
+ * The goal is calculated with a CHANCE% chance of changing.
+ * CHANCE is a float between 0 and 1 with 4 decimal places.
 */
-int calculateGoal(int pos) {
-    // 1% chance of changing goal
-    if (rand() % 100 == 0) {
+int calculateGoal(int pos, float chance) {
+    if (rand() % 10000 < int (chance * 10000)) {
         int goal = rand() % MAXDEVIATION + 1;
         rand() % 2 ? goal += pos : goal = pos - goal;
         return goal;

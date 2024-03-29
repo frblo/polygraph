@@ -1,18 +1,24 @@
 #include <Servo.h>
-#include "grapharm.h"
+#include "src/grapharm.h"
 
-Servo servos[] = {Servo(), Servo(), Servo()};
-int pos[] = {60, 60, 60}; // default positions
-int goals[] = {60, 60, 60}; // default goals
+const int NUMSERVOS = 3;
+
+Servo servos[NUMSERVOS];
+int pos[NUMSERVOS]; // default positions
+int goals[NUMSERVOS]; // default goals
 
 /**
  * Arduino setup function. Will run once, when 
  * the arduino is powered up.
 */
 void setup() {
-    setupArm(&servos[0], 4);
-    setupArm(&servos[1], 3);
-    setupArm(&servos[2], 2);
+    int pins[NUMSERVOS] = {2, 3, 4};
+    for (int i = 0; i < NUMSERVOS; i++) {
+        servos[i] = Servo();
+        setupArm(&servos[i], pins[i]);
+        pos[i] = 90;
+        goals[i] = 90;
+    }
 }
 
 /**
@@ -20,7 +26,7 @@ void setup() {
  * after the setup function has run.
 */
 void loop() {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < NUMSERVOS; i++) {
         pos[i] = rotateArm(&servos[i], pos[i], &goals[i]);
     }
     delay(6);
