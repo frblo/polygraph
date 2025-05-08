@@ -21,7 +21,7 @@ rotaryencoder re = setupRE(A0, A1, A2); // rotary encoder
 */
 void setup() {
     uint8_t pins[NUMSERVOS] = {2, 3, 4};
-    for (int i = 0; i < NUMSERVOS; i++) {
+    for (uint8_t i = 0; i < NUMSERVOS; i++) {
         servos[i] = Servo();
         setupArm(&servos[i], pins[i]);
         pos[i] = 90;
@@ -37,7 +37,7 @@ void setup() {
  * after the setup function has run.
 */
 void loop() {
-    for (int i = 0; i < NUMSERVOS; i++) {
+    for (uint8_t i = 0; i < NUMSERVOS; i++) {
         pos[i] = rotateArm(&servos[i], pos[i], &goals[i], chances[i]);
     }
 

@@ -65,7 +65,7 @@ uint8_t updateServoChooser(servochooser *sc, uint8_t delay) {
             sc->timer--;
             return 1;
         }
-        else if (sc->timer % (500 / delay) == 0) {
+        if (sc->timer % (500 / delay) == 0) {
             sc->timesBlinked++;
             sc->timer--;
             return 0;
